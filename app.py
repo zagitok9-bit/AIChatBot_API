@@ -4,19 +4,22 @@ from flask_cors import CORS
 app = Flask(__name__)
 CORS(app)
 
-@app.route("/chat", methods=["POST"])
+@app.route('/')
+def home():
+    return "AIChatBot API is running! 🚀"
+
+@app.route('/chat', methods=['POST'])
 def chat():
     data = request.get_json()
-    message = data.get("message", "")
-    if not message:
-        return jsonify({"reply": "⚠️ Empty message received."})
-    
-    # Пример простой обработки:
-    reply = f"🤖 AI: I received your message → '{message}'"
-    return jsonify({"reply": reply})
+    user_message = data.get("message", "")
 
-if __name__ == "__main__":
-    # Railway автоматически подставит PORT из окружения
-    import os
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    # Пример простого ответа — можешь поменять логику под свой AI
+    if not user_message.strip():
+        bot_reply = "Please say something 😅"
+    else:
+        bot_reply = f"You said: {user_message}"
+
+    return jsonify({"reply": bot_reply})
+
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
